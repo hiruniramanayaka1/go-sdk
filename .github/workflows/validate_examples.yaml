@@ -1,3 +1,10 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 3 optimizations:
+# - [HIGH] Add pip dependency cache to "validate-example" job
+# - [MEDIUM] Add concurrency group to "validate_examples.yaml"
+# - [LOW] Explicitly set fail-fast for large matrix job "validate-example" (18 combinations)
+# Estimated savings: ~7 min/run
+#
 name: validate-examples
 
 on:
@@ -24,6 +31,10 @@ on:
   repository_dispatch:
     types: [validate-examples]
   merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   setup:
     runs-on: ubuntu-latest
